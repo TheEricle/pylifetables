@@ -15,8 +15,7 @@ class LifeTable:
 	def preprocess_pop(pop_distribution_csv):
 		pop_distribution_raw = pandas.DataFrame.from_csv(pop_distribution_csv, sep=';', index_col=None)
 		pop_distribution_raw = pop_distribution_raw.applymap(str)
-		pop_distribution_raw = pop_distribution_raw.applymap(float)
-		pop_distribution = pop_distribution_raw.iloc[:,0:4]
+		pop_distribution = pop_distribution_raw.applymap(float)
 		return pop_distribution
 
 	def get_pop_distribution(self):
@@ -122,32 +121,19 @@ class LifeTable:
 		npx.name = "npx"
 		return npx
 
+	def get_pop_nlx(self):
+		# nLx = n*lx+n + nax*ndx
+		# open ended nx = lx/open ended nmx
+		raise NotImplementedError
 
+	def get_pop_lx(self):
+		# npx = 1-nqx
+		raise NotImplementedError
 
+	def get_pop_tx(self):
+		# Tx = sum of all the nLx from x to the end
+		raise NotImplementedError
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# l0 starts with 100000
-# lx+n = lx*npx
-
-
-# nLx = n*lx+n + nax*ndx
-# open ended nx = lx/open ended nmx
-
-# Tx = sum of all the nLx from x to the end
-
-# ex = Tx/lx
-
-
-
+	def get_pop_ex(self):
+		# ex = Tx/lx
+		raise NotImplementedError
