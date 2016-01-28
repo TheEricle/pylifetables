@@ -121,19 +121,34 @@ class LifeTable:
 		npx.name = "npx"
 		return npx
 
+
 	def get_pop_nlx(self):
 		# nLx = n*lx+n + nax*ndx
 		# open ended nx = lx/open ended nmx
-		raise NotImplementedError
+		nmx = self.get_pop_nmx()
+		lx = self.get_pop_lx()
+		lx_plus_nmx = pandas.concat([lx, nmx], axis=1)
+		nlx_tail =  lx_plus_nmx.tail(n=1).apply(lambda x: x["lx"]/x["nmx"], axis=1)
+		#remove tail
+		nlx_tailless=self.get_pop_n()*lx+self.get_pop_n()+self.get_pop_nax()*self.get_pop_ndx().iloc[:-1]
+		nlx = pandas.concat([nlx_tailless,nlx_tail])
+		nlx.name = "nlx"
+		return nlx
 
 	def get_pop_lx(self):
-		# npx = 1-nqx
-		raise NotImplementedError
+		latest_pop = 100000
+		lx = pandas.Series()
+		counter=0
+		for nqx in self.get_pop_nqx().values:
+			lx = lx.set_value(counter,latest_pop)
+			latest_pop = int(latest_pop*(1-nqx))
+			counter+=1
+		lx.name = "lx"
+		return lx
 
 	def get_pop_tx(self):
-		# Tx = sum of all the nLx from x to the end
-		raise NotImplementedError
+		return self.get_pop_lx().cumsum()
 
 	def get_pop_ex(self):
 		# ex = Tx/lx
-		raise NotImplementedError
+		return self.get_pop_tx()/self.get_pop_lx()

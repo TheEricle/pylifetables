@@ -55,7 +55,7 @@ class LifeTableTests(unittest.TestCase):
             self.answer_key["nLx"].all(), "nlx calculation differs from answer key.")
         print "LifeTableTests:testnlx"
 
-        # test npx
+        # test lx
     def testlx(self):
         """Test lx method"""
         self.assertEqual(self.sample_table.get_pop_lx().all(), 
