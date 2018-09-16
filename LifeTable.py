@@ -21,6 +21,28 @@ class LifeTable:
 	def get_pop_distribution(self):
 		return self.pop_distribution
 
+	def get_lifetable(self):
+		#Outputs a life table as a csv.
+		lifetable_df = pandas.concat([self.get_pop_x(),
+										self.get_pop_n(),
+										self.get_pop_ndx(), 
+										self.get_pop_nnx(),
+										self.get_pop_nmx(),
+										self.get_pop_nax(),
+										self.get_pop_nqx(),
+										self.get_pop_npx(),
+										self.get_pop_nlx(),
+										self.get_pop_lx(),
+										self.get_pop_tx(),
+										self.get_pop_ex()], axis=1)
+		try: 
+			lifetable_df.to_csv("lifetable.csv")
+		except:
+			print("Cannot generate life table csv.")
+
+		return lifetable_df;
+
+
 	def get_pop_x(self):
 		# x is first age in the interval
 		return self.get_pop_distribution()['x']
@@ -49,7 +71,7 @@ class LifeTable:
 
 	@staticmethod
 	def calculate_nqx(n, nmx, nax):
-	#TODO factor in last row is always 1
+	#@TODO factor in last row is always 1
 		return(n * nmx)/(1+(n-nax)*nmx)
 
 	def get_pop_nqx(self):
@@ -147,8 +169,12 @@ class LifeTable:
 		return lx
 
 	def get_pop_tx(self):
-		return self.get_pop_lx().cumsum()
+		tx = self.get_pop_lx().cumsum()
+		tx.name = "tx"
+		return tx
 
 	def get_pop_ex(self):
 		# ex = Tx/lx
-		return self.get_pop_tx()/self.get_pop_lx()
+		ex = self.get_pop_tx()/self.get_pop_lx()
+		ex.name = "ex"
+		return ex
